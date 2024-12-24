@@ -27,7 +27,8 @@ default_prefs = {
         },
         'tl': '',
         'br': '',
-        'zoom': ''
+        'zoom': '',
+        'max_threads': 8
     }
 
 
@@ -69,14 +70,13 @@ def run():
     lon1 = float(lon1)
     lat2 = float(lat2)
     lon2 = float(lon2)
+    name = f'img_{lat1}_{lon1}_{lat2}_{lon2}_{zoom}.tif'
+    out_path = os.path.join(prefs['dir'], name)
 
-    img = download_image(lat1, lon1, lat2, lon2, zoom, prefs['url'],
-        prefs['headers'], tile_size, channels)
+    download_image(lat1, lon1, lat2, lon2, zoom, prefs['url'],
+                   prefs['headers'], out_path, tile_size, channels, prefs['max_threads'])
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    name = f'img_{timestamp}.png'
-    cv2.imwrite(os.path.join(prefs['dir'], name), img)
-    print(f'Saved as {name}')
+    print(f'Saved as {out_path}')
 
 
 if os.path.isfile(prefs_path):
